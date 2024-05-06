@@ -1,11 +1,12 @@
-import React from 'react';
-import logo from './logo.svg';
 import './App.css';
-import { getCategories } from './services/api';
+import { Routes, Route } from 'react-router-dom';
+import HomePage from './__pages__/HomePage';
 
-async function App() {
+function App() {
   return (
-    <h1>Meu App</h1>
+    <Routes>
+      <Route path="/" element={ <HomePage /> } />
+    </Routes>
   );
 }
 
