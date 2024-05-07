@@ -33,3 +33,8 @@ export type ProductsType = {
   differential_pricing: object,
   inventory_id: null
 };
+
+export type Product = {
+  id: string;
+  name: string;
+};
