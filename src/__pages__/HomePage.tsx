@@ -1,6 +1,10 @@
 import { useEffect, FormEvent, useState } from 'react';
 import SearchBar from '../__components__/Search';
-import { getProductByQuery, getCategories } from '../services/api';
+import {
+  getProductByQuery,
+  getCategories,
+  getProductByCategoryId,
+} from '../services/api';
 import Card from '../__components__/Card';
 import { ProductsType, Product } from '../types';
 import Aside from '../__components__/Aside';
@@ -8,66 +12,72 @@ import Loading from '../__components__/Loading';
 
 export default function HomePage() {
   const [categoriesList, setCategoriesList] = useState<Product[]>();
-  const [isLoading, setIsLoading] = useState(true);
-  const [isListEmpty, setIsListEmpty] = useState(true);
-  const [products, setProducts] = useState<ProductsType[] | null>([]);
-  const [searched, setSearched] = useState('');
-
-  const handleType = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSearched(event.target.value);
-  };
-
-  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
-    // Previne evento de limpar os inputs
-    event.preventDefault();
-    // Função que pega os dados da API já processados e atualiza o status da variável "products"
-    setProducts(await getProductByQuery(searched));
-    // Altera o estado da mensagem inicial
-    setIsListEmpty(false);
-  };
+  const [isCatListLoading, setIsCatListLoading] = useState(true);
+  const [isListLoading, setIsListLoading] = useState(false);
+  const [products, setProducts] = useState<ProductsType[]>([]);
+  const [query, setQuery] = useState('');
+  const [searched, setSearched] = useState(false);
 
   useEffect(() => {
     async function gettingData() {
       const data = await getCategories();
       setCategoriesList(data);
-      setIsLoading(false);
+      setIsCatListLoading(false);
     }
     gettingData();
   }, []);
-  
-  function handleShowSearch() {
-    if (!products || products.length === 0) {
-      return <p>Nenhum produto foi encontrado.</p>;
-    }
-    return products.map((product) => (
-      <Card
-        key={ product.id }
-        prop={ product }
-      />
-    ));
-  }
+
+  const handleCatChange = async (id: string) => {
+    setIsListLoading(true);
+    const data = await getProductByCategoryId(id);
+    setProducts(data);
+    setIsListLoading(false);
+  };
+
+  const handleType = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setQuery(event.target.value);
+  };
+
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setIsListLoading(true);
+    setProducts(await getProductByQuery(query));
+    setSearched(true);
+    setIsListLoading(false);
+  };
 
   return (
     <>
       {
-        isLoading
+        isCatListLoading
           ? <Loading />
-          : <Aside categories={ categoriesList } />
+          : <Aside selectCat={ handleCatChange } categories={ categoriesList } />
       }
       <SearchBar
-        searched={ searched }
+        searched={ query }
         handleType={ handleType }
         onSubmit={ handleSubmit }
       />
-      { isListEmpty
-        ? (
+      { !products.length && !searched
+        && (
           <p
             data-testid="home-initial-message"
           >
             Digite algum termo de pesquisa ou escolha uma categoria.
           </p>
-        )
-        : handleShowSearch()}
+        )}
+      { !products.length && searched && <p>Nenhum produto foi encontrado.</p>}
+      {
+        isListLoading
+          ? <Loading />
+          : (
+            products.map((product) => (
+              <Card
+                key={ product.id }
+                prop={ product }
+              />
+            )))
+      }
     </>
   );
 }
