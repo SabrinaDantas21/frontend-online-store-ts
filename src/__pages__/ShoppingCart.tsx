@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { FaShoppingCart } from 'react-icons/fa';
 import { TiArrowBack } from 'react-icons/ti';
 import { Link } from 'react-router-dom';
@@ -27,12 +27,7 @@ export default function ShoppingCart() {
               Seu carrinho está vazio
             </p>
           )
-          : cart.map((product, index) => (
-            <Card
-              key={ index }
-              prop={ product }
-            />
-          ))
+          : <h2>produtos no carrinho</h2>
 }
     </div>
   );
