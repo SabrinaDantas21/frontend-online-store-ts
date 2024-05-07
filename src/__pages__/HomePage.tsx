@@ -18,7 +18,6 @@ export default function HomePage() {
   };
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
-    // Previne evento de limpar os inputs
     event.preventDefault();
     // Função que pega os dados da API já processados e atualiza o status da variável "products"
     setProducts(await getProductByQuery(searched));
@@ -34,7 +33,7 @@ export default function HomePage() {
     }
     gettingData();
   }, []);
-  
+
   function handleShowSearch() {
     if (!products || products.length === 0) {
       return <p>Nenhum produto foi encontrado.</p>;
