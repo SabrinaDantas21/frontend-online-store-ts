@@ -38,3 +38,8 @@ export type Product = {
   id: string;
   name: string;
 };
+
+export type AsideProps = {
+  categories?: Product[];
+  selectCat: (id: string) => Promise<void>;
+};

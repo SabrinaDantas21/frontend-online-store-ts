@@ -1,6 +1,6 @@
-import { Product } from '../types';
+import { AsideProps, Product } from '../types';
 
-function Aside({ categories = [] }: { categories?: Product[] }) {
+function Aside({ categories = [], selectCat }: AsideProps) {
   return (
     <aside>
       {
@@ -8,7 +8,12 @@ function Aside({ categories = [] }: { categories?: Product[] }) {
           return (
             <label htmlFor={ id } key={ id } data-testid="category">
               { name }
-              <input type="radio" id={ id } name="radio-button-categories" />
+              <input
+                onChange={ () => selectCat(id) }
+                type="radio"
+                id={ id }
+                name="radio-button-categories"
+              />
             </label>
           );
         })
