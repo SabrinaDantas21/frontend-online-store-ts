@@ -1,10 +1,17 @@
-import { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FaShoppingCart } from 'react-icons/fa';
 import { TiArrowBack } from 'react-icons/ti';
 import { Link } from 'react-router-dom';
+import Card from '../__components__/Card';
 
 export default function ShoppingCart() {
-  const [isCartEmpty, setIsCartEmpty] = useState(true);
+  const [cart, setCart] = useState<string[] | []>([]);
+
+  useEffect(() => {
+    const jsonString = localStorage.getItem('productsCart');
+    const products = jsonString ? JSON.parse(jsonString) : [];
+    setCart(products);
+  }, []);
 
   return (
     <div>
@@ -14,14 +21,19 @@ export default function ShoppingCart() {
       </h2>
       <Link to="/"><TiArrowBack /></Link>
       {
-        isCartEmpty
+        !cart
           ? (
             <p data-testid="shopping-cart-empty-message">
               Seu carrinho está vazio
             </p>
           )
-          : <p>Shopping Cart</p>
-      }
+          : cart.map((product, index) => (
+            <Card
+              key={ index }
+              prop={ product }
+            />
+          ))
+}
     </div>
   );
 }
