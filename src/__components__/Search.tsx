@@ -1,14 +1,20 @@
 import { Link } from 'react-router-dom';
 import { FaShoppingCart } from 'react-icons/fa';
+import { FormEvent } from 'react';
 
 export type SearchBarProp = {
   searched: string;
   handleType: (value: React.ChangeEvent<HTMLInputElement>) => void;
+  onSubmit: (value: FormEvent<HTMLFormElement>) => void;
 };
 
-export default function SearchBar({ searched, handleType }: SearchBarProp) {
+export default function SearchBar({
+  searched,
+  handleType,
+  onSubmit,
+}: SearchBarProp) {
   return (
-    <form>
+    <form onSubmit={ onSubmit }>
       <input
         data-testid="query-input"
         type="search"

@@ -19,10 +19,9 @@ export async function getProductById() {
   // Atenção: essa função não deverá ser chamada na tela do carrinho de compras.
 }
 
-export async function getProductByQuery(query: string = 'caneca') {
+export async function getProductByQuery(query: string) {
   const result = await fetch(`https://api.mercadolibre.com/sites/MLB/search?q=${query}`);
 
   const data = await result.json();
-
-  return data;
+  return data.results;
 }
