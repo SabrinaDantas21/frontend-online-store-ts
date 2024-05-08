@@ -44,3 +44,38 @@ export type AsideProps = {
   categories?: Product[];
   selectCat: (id: string) => Promise<void>;
 };
+
+export type ProductDetails = {
+  id: string;
+  title: string;
+  price: number;
+  thumbnail: string;
+  condition: string;
+  attributes: {
+    name: string;
+    value_name: string;
+  }[];
+};
+
+export type AttributeType = {
+  id: string;
+  name: string;
+  value_name: string;
+};
+
+export type DetailsProps = {
+  id: string;
+  title: string;
+  price: number;
+  thumbnail: string;
+  condition: string;
+  attributes: {
+    name: string;
+    value_name: string;
+  }[];
+};
+
+export type InfoListProp = {
+  especification: string;
+  description: string;
+};
