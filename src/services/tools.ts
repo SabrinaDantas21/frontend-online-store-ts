@@ -16,4 +16,15 @@ function addProductCart(prop: ProductsType) {
   localStorage.setItem('productsCart', JSON.stringify(cart));
 }
 
-export { addProductCart };
+function removeProductCart(product: ProductsType) {
+  const jsonString = localStorage.getItem('productsCart');
+  const cart: ProductsType[] = jsonString ? JSON.parse(jsonString) : [];
+  const productInCart = cart.find((product2) => product2.id === product.id);
+
+  if (productInCart) {
+    productInCart.selected_quantity = (productInCart.selected_quantity - 1) || 1;
+  }
+  localStorage.setItem('productsCart', JSON.stringify(cart));
+}
+
+export { addProductCart, removeProductCart };

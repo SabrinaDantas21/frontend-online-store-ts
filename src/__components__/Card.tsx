@@ -1,10 +1,23 @@
 import { useLocation, Link } from 'react-router-dom';
 
+import { IoRemoveOutline, IoAddOutline } from 'react-icons/io5';
+import { useState } from 'react';
 import { ProductsType } from '../types';
-import { addProductCart } from '../services/tools';
+import { addProductCart, removeProductCart } from '../services/tools';
 
 function Card({ prop }:{ prop: ProductsType }) {
+  const [quantity, setQuantity] = useState<number>(1);
   const location = useLocation();
+
+  const handleDecrement = () => {
+    removeProductCart(prop);
+    setQuantity(prop.selected_quantity);
+  };
+
+  const handleIncrement = () => {
+    addProductCart(prop);
+    setQuantity(prop.selected_quantity);
+  };
 
   return (
     <section data-testid="product">
@@ -33,11 +46,23 @@ function Card({ prop }:{ prop: ProductsType }) {
             <>
               <h2 data-testid="shopping-cart-product-name">{prop.title}</h2>
               <h4>{ `Preço:R$${prop.price}` }</h4>
+              <button
+                data-testid="product-decrease-quantity"
+                onClick={ handleDecrement }
+              >
+                <IoRemoveOutline />
+              </button>
               <h4
                 data-testid="shopping-cart-product-quantity"
               >
-                {prop.selected_quantity}
+                {quantity}
               </h4>
+              <button
+                data-testid="product-increase-quantity"
+                onClick={ handleIncrement }
+              >
+                <IoAddOutline />
+              </button>
             </>
           )
       }
