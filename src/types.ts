@@ -17,6 +17,7 @@ export type ProductsType = {
   original_price: null,
   sale_price: object,
   available_quantity: string,
+  selected_quantity: number,
   official_store_id: null,
   use_thumbnail_id: boolean,
   accepts_mercadopago: boolean,
