@@ -3,20 +3,22 @@ import { useLocation, Link } from 'react-router-dom';
 import { IoRemoveOutline, IoAddOutline } from 'react-icons/io5';
 import { useState } from 'react';
 import { ProductsType } from '../types';
-import { addProductCart, removeProductCart } from '../services/tools';
+import { addProductCart, removeProductCart, getItemQuantity } from '../services/tools';
 
 function Card({ prop }:{ prop: ProductsType }) {
-  const [quantity, setQuantity] = useState<number>(1);
+  const [quantity, setQuantity] = useState(1);
   const location = useLocation();
 
   const handleDecrement = () => {
     removeProductCart(prop);
-    setQuantity(prop.selected_quantity);
+    const productQuantity = getItemQuantity(prop);
+    if (productQuantity) setQuantity(productQuantity);
   };
 
   const handleIncrement = () => {
     addProductCart(prop);
-    setQuantity(prop.selected_quantity);
+    const productQuantity = getItemQuantity(prop);
+    if (productQuantity) setQuantity(productQuantity);
   };
 
   return (

@@ -27,4 +27,10 @@ function removeProductCart(product: ProductsType) {
   localStorage.setItem('productsCart', JSON.stringify(cart));
 }
 
-export { addProductCart, removeProductCart };
+function getItemQuantity(product: ProductsType) {
+  const jsonString = localStorage.getItem('productsCart');
+  const cart: ProductsType[] = jsonString ? JSON.parse(jsonString) : [];
+  return cart.find((product2) => product2.id === product.id)?.selected_quantity;
+}
+
+export { addProductCart, removeProductCart, getItemQuantity };
