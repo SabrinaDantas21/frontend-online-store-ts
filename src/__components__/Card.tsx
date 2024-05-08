@@ -23,27 +23,26 @@ function Card({ prop }:{ prop: ProductsType }) {
   const location = useLocation();
 
   return (
-    <Link
-      data-testid="product-detail-link"
-      to={ `/details/${prop.id}` }
-    >
-      <section data-testid="product">
-        {
+    <section data-testid="product">
+      {
         location.pathname === '/'
           ? (
             <>
-              <h2>{ prop.title }</h2>
-              <img src={ prop.thumbnail } alt={ prop.title } />
-              <h4>{ `Preço:R$${prop.price}` }</h4>
-              <label htmlFor="add-to-cart">
-                <input
-                  id="add-to-cart"
-                  type="checkbox"
-                  data-testid="product-add-to-cart"
-                  onChange={ addProductCart }
-                />
+              <Link
+                data-testid="product-detail-link"
+                to={ `/details/${prop.id}` }
+              >
+                <h2>{ prop.title }</h2>
+                <img src={ prop.thumbnail } alt={ prop.title } />
+                <h4>{ `Preço:R$${prop.price}` }</h4>
+              </Link>
+              <button
+                type="button"
+                data-testid="product-add-to-cart"
+                onClick={ addProductCart }
+              >
                 Adicionar ao carrinho
-              </label>
+              </button>
             </>
           )
           : (
@@ -58,8 +57,8 @@ function Card({ prop }:{ prop: ProductsType }) {
             </>
           )
       }
-      </section>
-    </Link>
+    </section>
+
   );
 }
 
