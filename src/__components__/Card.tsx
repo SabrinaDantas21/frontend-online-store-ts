@@ -1,25 +1,15 @@
 import { useLocation, Link } from 'react-router-dom';
 
 import { IoRemoveOutline, IoAddOutline } from 'react-icons/io5';
-import { useState } from 'react';
-import { ProductsType } from '../types';
-import { addProductCart, removeProductCart, getItemQuantity } from '../services/tools';
+import { CardInfoPropsType } from '../types';
 
-function Card({ prop }:{ prop: ProductsType }) {
-  const [quantity, setQuantity] = useState(1);
+function Card({
+  prop,
+  addProductFunc,
+  decrementProductFunc,
+  removeProductFunc,
+}:CardInfoPropsType) {
   const location = useLocation();
-
-  const handleDecrement = () => {
-    removeProductCart(prop);
-    const productQuantity = getItemQuantity(prop);
-    if (productQuantity) setQuantity(productQuantity);
-  };
-
-  const handleIncrement = () => {
-    addProductCart(prop);
-    const productQuantity = getItemQuantity(prop);
-    if (productQuantity) setQuantity(productQuantity);
-  };
 
   return (
     <section data-testid="product">
@@ -38,7 +28,7 @@ function Card({ prop }:{ prop: ProductsType }) {
               <button
                 type="button"
                 data-testid="product-add-to-cart"
-                onClick={ () => addProductCart(prop) }
+                onClick={ () => addProductFunc(prop) }
               >
                 Adicionar ao carrinho
               </button>
@@ -50,20 +40,26 @@ function Card({ prop }:{ prop: ProductsType }) {
               <h4>{ `Preço:R$${prop.price}` }</h4>
               <button
                 data-testid="product-decrease-quantity"
-                onClick={ handleDecrement }
+                onClick={ () => decrementProductFunc && decrementProductFunc(prop) }
               >
                 <IoRemoveOutline />
               </button>
               <h4
                 data-testid="shopping-cart-product-quantity"
               >
-                {quantity}
+                {prop.selected_quantity}
               </h4>
               <button
                 data-testid="product-increase-quantity"
-                onClick={ handleIncrement }
+                onClick={ () => addProductFunc(prop) }
               >
                 <IoAddOutline />
+              </button>
+              <button
+                data-testid="remove-product"
+                onClick={ () => removeProductFunc && removeProductFunc(prop) }
+              >
+                Remover Produto
               </button>
             </>
           )

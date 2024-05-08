@@ -79,3 +79,10 @@ export type InfoListProp = {
   especification: string;
   description: string;
 };
+
+export type CardInfoPropsType = {
+  prop: ProductsType;
+  addProductFunc: (prop: ProductsType) => void;
+  decrementProductFunc?: (prop: ProductsType) => void;
+  removeProductFunc?: (prop: ProductsType) => void;
+};

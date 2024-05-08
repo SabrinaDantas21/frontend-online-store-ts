@@ -4,6 +4,11 @@ import { TiArrowBack } from 'react-icons/ti';
 import { Link } from 'react-router-dom';
 import Card from '../__components__/Card';
 import { ProductsType } from '../types';
+import {
+  addProductCart,
+  decrementProductCart,
+  removeProductCart,
+} from '../services/tools';
 
 export default function ShoppingCart() {
   const [cart, setCart] = useState<ProductsType[] | []>([]);
@@ -13,6 +18,21 @@ export default function ShoppingCart() {
     const products = jsonString ? JSON.parse(jsonString) : [];
     setCart(products);
   }, []);
+
+  const handleIncrementProduct = (prop: ProductsType) => {
+    const newCart = addProductCart(prop);
+    setCart(newCart);
+  };
+
+  const handleDecrementProduct = (prop: ProductsType) => {
+    const newCart = decrementProductCart(prop);
+    setCart(newCart);
+  };
+
+  const handleProductRemoval = (prop: ProductsType) => {
+    const newCart = removeProductCart(prop);
+    setCart(newCart);
+  };
 
   return (
     <div>
@@ -31,6 +51,9 @@ export default function ShoppingCart() {
           : cart.map((element, index) => (<Card
               key={ index }
               prop={ element }
+              addProductFunc={ () => handleIncrementProduct(element) }
+              decrementProductFunc={ () => handleDecrementProduct(element) }
+              removeProductFunc={ () => handleProductRemoval(element) }
           />
           ))
             }
