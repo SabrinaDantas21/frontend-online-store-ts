@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import { getProductById } from '../services/api';
 import InfoList from '../__components__/InfoList';
 import { AttributeType, ProductsType } from '../types';
+import { addProductCart } from '../services/tools';
 
 function DetailsPage() {
   const [productDetails, setProductDetails] = useState<ProductsType>();
@@ -22,13 +23,19 @@ function DetailsPage() {
   return (
     <div>
       <Link to="/"><TiArrowBack /></Link>
-      <h1>Eu sou uma página de detalhes</h1>
       <Link
         to="/shopping-cart"
         data-testid="shopping-cart-button"
       >
         <FaShoppingCart />
       </Link>
+      <button
+        type="button"
+        data-testid="product-detail-add-to-cart"
+        onClick={ () => { if (productDetails) addProductCart(productDetails); } }
+      >
+        Adicionar ao carrinho
+      </button>
       <div>
         <h2 data-testid="product-detail-name">
           {productDetails?.title}
