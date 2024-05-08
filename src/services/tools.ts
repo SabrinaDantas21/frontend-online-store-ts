@@ -41,4 +41,8 @@ function removeProductCart(product: ProductsType) {
   return filteredCart;
 }
 
-export { addProductCart, decrementProductCart, removeProductCart };
+function clearCart() {
+  localStorage.setItem('productsCart', '');
+}
+
+export { addProductCart, decrementProductCart, removeProductCart, clearCart };
