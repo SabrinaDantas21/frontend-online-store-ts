@@ -3,7 +3,6 @@ import { useLocation, Link } from 'react-router-dom';
 import { ProductsType } from '../types';
 
 function Card({ prop }:{ prop: ProductsType }) {
-  const { title } = prop;
   function addProductCart() {
     const jsonString = localStorage.getItem('productsCart');
     const cart: ProductsType[] = jsonString ? JSON.parse(jsonString) : [];
