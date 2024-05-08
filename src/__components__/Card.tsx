@@ -3,18 +3,22 @@ import { ProductsType } from '../types';
 
 function Card({ prop }:{ prop: ProductsType }) {
   const { title } = prop;
-  function addProductCart(event: React.ChangeEvent<HTMLInputElement>) {
-    let newCart;
+  function addProductCart() {
     const jsonString = localStorage.getItem('productsCart');
-    const cart: ProductsType[] = jsonString ? JSON.parse(jsonString as string) : [];
-    if (!event.target.checked) {
-      newCart = cart.filter((item) => item.title !== title);
-      localStorage.setItem('productsCart', JSON.stringify(newCart));
+    const cart: ProductsType[] = jsonString ? JSON.parse(jsonString) : [];
+    const selectedProductIndex = cart.findIndex((item) => item.id === prop.id);
+    const productToAdd = { ...prop, selected_quantity: 1 };
+
+    if (selectedProductIndex !== -1) {
+      cart[selectedProductIndex].selected_quantity = (
+        cart[selectedProductIndex].selected_quantity || 1) + 1;
     } else {
-      cart.push(prop);
-      localStorage.setItem('productsCart', JSON.stringify(cart));
+      cart.push(productToAdd);
     }
+
+    localStorage.setItem('productsCart', JSON.stringify(cart));
   }
+
   const location = useLocation();
 
   return (
@@ -41,7 +45,7 @@ function Card({ prop }:{ prop: ProductsType }) {
         <>
           <h2 data-testid="shopping-cart-product-name">{prop.title}</h2>
           <h4>{ `Preço:R$${prop.price}` }</h4>
-          <h4 data-testid="shopping-cart-product-quantity">{prop.available_quantity}</h4>
+          <h4 data-testid="shopping-cart-product-quantity">{prop.selected_quantity}</h4>
         </>
       )
   }
