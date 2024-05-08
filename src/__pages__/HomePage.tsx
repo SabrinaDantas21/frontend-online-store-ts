@@ -9,6 +9,7 @@ import Card from '../__components__/Card';
 import { ProductsType, Product } from '../types';
 import Aside from '../__components__/Aside';
 import Loading from '../__components__/Loading';
+import { addProductCart } from '../services/tools';
 
 export default function HomePage() {
   const [categoriesList, setCategoriesList] = useState<Product[]>();
@@ -75,6 +76,7 @@ export default function HomePage() {
               <Card
                 key={ product.id }
                 prop={ product }
+                addProductFunc={ () => addProductCart(product) }
               />
             )))
       }

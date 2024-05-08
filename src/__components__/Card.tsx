@@ -1,9 +1,14 @@
 import { useLocation, Link } from 'react-router-dom';
 
-import { ProductsType } from '../types';
-import { addProductCart } from '../services/tools';
+import { IoRemoveOutline, IoAddOutline } from 'react-icons/io5';
+import { CardInfoPropsType } from '../types';
 
-function Card({ prop }:{ prop: ProductsType }) {
+function Card({
+  prop,
+  addProductFunc,
+  decrementProductFunc,
+  removeProductFunc,
+}:CardInfoPropsType) {
   const location = useLocation();
 
   return (
@@ -23,7 +28,7 @@ function Card({ prop }:{ prop: ProductsType }) {
               <button
                 type="button"
                 data-testid="product-add-to-cart"
-                onClick={ () => addProductCart(prop) }
+                onClick={ () => addProductFunc(prop) }
               >
                 Adicionar ao carrinho
               </button>
@@ -33,11 +38,29 @@ function Card({ prop }:{ prop: ProductsType }) {
             <>
               <h2 data-testid="shopping-cart-product-name">{prop.title}</h2>
               <h4>{ `Preço:R$${prop.price}` }</h4>
+              <button
+                data-testid="product-decrease-quantity"
+                onClick={ () => decrementProductFunc && decrementProductFunc(prop) }
+              >
+                <IoRemoveOutline />
+              </button>
               <h4
                 data-testid="shopping-cart-product-quantity"
               >
                 {prop.selected_quantity}
               </h4>
+              <button
+                data-testid="product-increase-quantity"
+                onClick={ () => addProductFunc(prop) }
+              >
+                <IoAddOutline />
+              </button>
+              <button
+                data-testid="remove-product"
+                onClick={ () => removeProductFunc && removeProductFunc(prop) }
+              >
+                Remover Produto
+              </button>
             </>
           )
       }
