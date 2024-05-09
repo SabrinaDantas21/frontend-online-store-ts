@@ -51,9 +51,9 @@ export default function ShoppingCart({ cart, setCart }: ShoppingCartPropsType) {
           : cart.map((element, index) => (<Card
               key={ index }
               prop={ element }
-              addProductFunc={ () => handleIncrementProduct(element) }
-              decrementProductFunc={ () => handleDecrementProduct(element) }
-              removeProductFunc={ () => handleProductRemoval(element) }
+              addProductFunc={ handleIncrementProduct }
+              decrementProductFunc={ handleDecrementProduct }
+              removeProductFunc={ handleProductRemoval }
           />
           ))
             }
