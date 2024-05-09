@@ -17,12 +17,11 @@ export default function CheckoutForm() {
   });
 
   const handleFormChange = (id: string, value: string) => {
-    const newValue = value;
     let currentFormObject = formData;
-    if (id === 'ticket' || id === 'visa' || id === 'master' || id === 'elo') {
+    if (['ticket', 'visa', 'master', 'elo'].includes(id)) {
       currentFormObject = { ...formData, payMethod: id };
     } else {
-      currentFormObject = { ...formData, [id]: newValue };
+      currentFormObject = { ...formData, [id]: value };
     }
     setFormData(currentFormObject);
   };
