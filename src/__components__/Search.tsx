@@ -1,17 +1,11 @@
-import { Link } from 'react-router-dom';
-import { FaShoppingCart } from 'react-icons/fa';
-import { FormEvent } from 'react';
-
-export type SearchBarProp = {
-  searched: string;
-  handleType: (value: React.ChangeEvent<HTMLInputElement>) => void;
-  onSubmit: (value: FormEvent<HTMLFormElement>) => void;
-};
+import CartButton from './CartButton';
+import { SearchBarProp } from '../types';
 
 export default function SearchBar({
   searched,
   handleType,
   onSubmit,
+  countItems,
 }: SearchBarProp) {
   return (
     <form onSubmit={ onSubmit }>
@@ -23,12 +17,7 @@ export default function SearchBar({
         value={ searched }
         onChange={ handleType }
       />
-      <Link
-        to="/shopping-cart"
-        data-testid="shopping-cart-button"
-      >
-        <FaShoppingCart />
-      </Link>
+      <CartButton countItems={ countItems } />
       <button
         type="submit"
         data-testid="query-button"

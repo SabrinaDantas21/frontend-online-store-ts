@@ -1,3 +1,5 @@
+import { FormEvent } from 'react';
+
 export type ProductsType = {
   id: string,
   title: string,
@@ -90,4 +92,11 @@ export type CardInfoPropsType = {
   addProductFunc: (prop: ProductsType) => void;
   decrementProductFunc?: (prop: ProductsType) => void;
   removeProductFunc?: (prop: ProductsType) => void;
+};
+
+export type SearchBarProp = {
+  searched: string;
+  handleType: (value: React.ChangeEvent<HTMLInputElement>) => void;
+  onSubmit: (value: FormEvent<HTMLFormElement>) => void;
+  countItems: number;
 };

@@ -1,13 +1,18 @@
 import { useParams, Link } from 'react-router-dom';
 import { TiArrowBack } from 'react-icons/ti';
-import { FaShoppingCart } from 'react-icons/fa';
 import { useEffect, useState } from 'react';
 import { getProductById } from '../services/api';
 import InfoList from '../__components__/InfoList';
 import { AttributeType, ProductsType } from '../types';
 import { addProductCart } from '../services/tools';
+import CartButton from '../__components__/CartButton';
 
-function DetailsPage() {
+type DetailsPageProp = {
+  setCountItems: React.Dispatch<React.SetStateAction<number>>;
+  countItems: number;
+};
+
+function DetailsPage({ setCountItems, countItems }: DetailsPageProp) {
   const [productDetails, setProductDetails] = useState<ProductsType>();
   const { id } = useParams();
 
@@ -23,16 +28,18 @@ function DetailsPage() {
   return (
     <div>
       <Link to="/"><TiArrowBack /></Link>
-      <Link
-        to="/shopping-cart"
-        data-testid="shopping-cart-button"
-      >
-        <FaShoppingCart />
-      </Link>
+      <CartButton countItems={ countItems } />
       <button
         type="button"
         data-testid="product-detail-add-to-cart"
-        onClick={ () => { if (productDetails) addProductCart(productDetails); } }
+        onClick={ () => {
+          if (productDetails) {
+            const storageCart = addProductCart(productDetails);
+            setCountItems(
+              storageCart.reduce((prev, curr) => prev + curr.selected_quantity, 0),
+            );
+          }
+        } }
       >
         Adicionar ao carrinho
       </button>
