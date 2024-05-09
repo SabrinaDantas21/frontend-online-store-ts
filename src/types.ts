@@ -86,3 +86,8 @@ export type CardInfoPropsType = {
   decrementProductFunc?: (prop: ProductsType) => void;
   removeProductFunc?: (prop: ProductsType) => void;
 };
+
+export type RatingProps = {
+  rating: number;
+  onRatingChange: (rating: number) => void;
+};

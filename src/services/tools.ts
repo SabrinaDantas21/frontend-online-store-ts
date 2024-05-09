@@ -41,4 +41,10 @@ function removeProductCart(product: ProductsType) {
   return filteredCart;
 }
 
-export { addProductCart, decrementProductCart, removeProductCart };
+function validateEmail(email: string):boolean {
+  const validRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
+  const verifyEmail = validRegex.test(email);
+  return verifyEmail;
+}
+
+export { addProductCart, decrementProductCart, removeProductCart, validateEmail };
