@@ -3,29 +3,28 @@ import { RatingProps } from '../types';
 
 function Rating({ rating, onRatingChange }: RatingProps) {
   const [hoveredRating, setHoveredRating] = useState<number | null>(null);
-  console.log(rating);
 
   const handleClick = (selectedRating: number) => {
     onRatingChange(selectedRating);
   };
 
-  const handleMouseEnter = () => {
-    setHoveredRating(hoveredRating);
+  const handleMouseEnter = (index:number) => {
+    setHoveredRating(index);
   };
 
   const handleMouseLeave = () => {
     setHoveredRating(null);
   };
 
-  const stars = [1, 2, 3, 4, 5];
-
   return (
     <div>
-      {stars.map((star, index) => {
+      {[...new Array(5)].map((star, index) => {
         return (
           <label
-            htmlFor=""
+            htmlFor={ `star-${index}` }
             key={ index }
+            onMouseEnter={ () => handleMouseEnter(index) }
+            onMouseLeave={ handleMouseLeave }
             style={ {
               cursor: 'pointer',
               color: (hoveredRating || rating) >= index ? 'gold' : 'gray',
@@ -36,11 +35,13 @@ function Rating({ rating, onRatingChange }: RatingProps) {
             <input
               type="radio"
               name="star"
+              style={ {
+                display: 'none',
+              } }
+              id={ `star-${index}` }
               value={ star }
               data-testid={ `${index}-rating` }
               onClick={ () => handleClick(index) }
-              onMouseEnter={ () => handleMouseEnter() }
-              onMouseLeave={ handleMouseLeave }
             />
           </label>
         );

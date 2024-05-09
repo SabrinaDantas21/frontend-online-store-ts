@@ -41,10 +41,19 @@ function removeProductCart(product: ProductsType) {
   return filteredCart;
 }
 
-function validateEmail(email: string):boolean {
-  const validRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
-  const verifyEmail = validRegex.test(email);
-  return verifyEmail;
+function validations(
+  email: string,
+  productRating: number,
+  setIsItValid: (value: boolean) => void,
+) {
+  const validateEmail = () => {
+    const validRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
+    return validRegex.test(email);
+  };
+
+  if (!email || !validateEmail || productRating < 0) {
+    setIsItValid(false);
+  }
 }
 
-export { addProductCart, decrementProductCart, removeProductCart, validateEmail };
+export { addProductCart, decrementProductCart, removeProductCart, validations };

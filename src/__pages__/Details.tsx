@@ -4,45 +4,69 @@ import { FaShoppingCart } from 'react-icons/fa';
 import { useEffect, useState } from 'react';
 import { getProductById } from '../services/api';
 import InfoList from '../__components__/InfoList';
-import { AttributeType, ProductsType } from '../types';
-import { addProductCart, validateEmail } from '../services/tools';
+import { AttributeType, CommentType, ProductsType } from '../types';
+import { addProductCart, validations } from '../services/tools';
 import Rating from '../__components__/Rating';
 
 function DetailsPage() {
+  // estado dos dados do produto que estão sendo renderizados
   const [productDetails, setProductDetails] = useState<ProductsType>();
+  // estados dos campos do formulário
   const [email, setEmail] = useState('');
-  const [comments, setComments] = useState('');
-  const [productRating, setProductRating] = useState<number>(-1);
+  const [text, setText] = useState('');
+  const [rating, setrating] = useState<number>(-1);
+  const [isItValid, setIsItValid] = useState(true);
+  const [commentsList, setCommentsList] = useState<CommentType[]>([]);
+  // id do elemento selecionado para exibição dos detalhes
   const { id } = useParams();
-
+  // Função enviada por prop para alterar o estado do elemento
   const handleRatingChange = (newRating: number) => {
-    setProductRating(newRating);
+    setrating(newRating);
   };
-
+  // Requisição de dados da API
   useEffect(() => {
     const getData = async () => {
       const data = await getProductById(id as string);
+      // Altera os dados armazenados em productDetails
       setProductDetails(data);
     };
 
     getData();
   }, [id]);
 
+  // Função que envia os dados do formulário
   const handleSubmit = (event: React.MouseEvent<HTMLButtonElement>) => {
+    // Previne envio do formulário
     event.preventDefault();
 
     // validações
-    if (!email || !validateEmail || productRating < 0) {
-      return (
-        <span>Campos inválidos</span>
-      );
-    }
-    // limpando imputs
-    setComments('');
-    setProductRating(-1);
-    setEmail('');
-  };
+    validations(email, rating, setIsItValid);
 
+    // dados para armazenar em localStorage
+
+    const newComment: CommentType = {
+      email,
+      text,
+      rating,
+    };
+
+    // adicionando dados à localStorage
+    function addComment(comment: CommentType) {
+      const jsonString = localStorage.getItem(id as string);
+      const list: CommentType[] = jsonString ? JSON.parse(jsonString) : []; // variável que armazena os dados do localStorage
+      list.push(comment);
+
+      localStorage.setItem(id as string, JSON.stringify(list));
+
+      return list;
+    }
+    setCommentsList(addComment(newComment));
+
+    // limpando imputs
+    setEmail('');
+    setText('');
+    setrating(-1);
+  };
   return (
     <div>
       <Link to="/"><TiArrowBack /></Link>
@@ -87,6 +111,7 @@ function DetailsPage() {
       </div>
       <h2>Avaliações</h2>
       <form>
+        { !isItValid && <span>Campos inválidos</span> }
         <input
           data-testid="product-detail-email"
           type="email"
@@ -95,15 +120,14 @@ function DetailsPage() {
           value={ email }
         />
         <div>
-          <Rating rating={ productRating } onRatingChange={ handleRatingChange } />
+          <Rating rating={ rating } onRatingChange={ handleRatingChange } />
         </div>
         <textarea
           data-testid="product-detail-evaluation"
           name="comments"
-          onChange={ (event) => setComments(event.target.value) }
-          value={ comments }
+          onChange={ (event) => setText(event.target.value) }
+          value={ text }
         />
-        <span>{ }</span>
         <button
           data-testid="submit-review-btn"
           onClick={ handleSubmit }
@@ -113,11 +137,19 @@ function DetailsPage() {
       </form>
 
       <section>
-        <div>
-          <h4 data-testid="review-card-email">Meu melhor e-mail</h4>
-          <span data-testid="review-card-rating">Minhas estrelas</span>
-          <p data-testid="review-card-evaluation">Meus comentários</p>
-        </div>
+        { commentsList.map((comment, index) => {
+          return (
+            <div
+              key={ index }
+            >
+              <h4 data-testid="review-card-email">{comment.email}</h4>
+              <div data-testid="review-card-rating">
+                { '★'.repeat(+comment.rating) }
+              </div>
+              <p data-testid="review-card-evaluation">{comment.text}</p>
+            </div>
+          );
+        })}
       </section>
     </div>
   );
