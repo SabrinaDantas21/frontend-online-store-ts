@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 import { getProductById } from '../services/api';
 import InfoList from '../__components__/InfoList';
 import { AttributeType, CommentType, ProductsType } from '../types';
-import { addProductCart, validations } from '../services/tools';
+import { addProductCart, validateEmail, addComment } from '../services/tools';
 import Rating from '../__components__/Rating';
 
 function DetailsPage() {
@@ -14,14 +14,14 @@ function DetailsPage() {
   // estados dos campos do formulário
   const [email, setEmail] = useState('');
   const [text, setText] = useState('');
-  const [rating, setrating] = useState<number>(-1);
+  const [rating, setRating] = useState<number>(-1);
   const [isItValid, setIsItValid] = useState(true);
   const [commentsList, setCommentsList] = useState<CommentType[]>([]);
   // id do elemento selecionado para exibição dos detalhes
   const { id } = useParams();
   // Função enviada por prop para alterar o estado do elemento
   const handleRatingChange = (newRating: number) => {
-    setrating(newRating);
+    setRating(newRating);
   };
   // Requisição de dados da API
   useEffect(() => {
@@ -32,6 +32,12 @@ function DetailsPage() {
     };
 
     getData();
+
+    // Pega os dados do localStorage e atualiza a lista de comentários
+    const jsonString = localStorage.getItem(id as string);
+    const list: CommentType[] = jsonString ? JSON.parse(jsonString) : [];
+    setCommentsList(list);
+    setIsItValid(true);
   }, [id]);
 
   // Função que envia os dados do formulário
@@ -40,10 +46,11 @@ function DetailsPage() {
     event.preventDefault();
 
     // validações
-    validations(email, rating, setIsItValid);
+    if (!email || !validateEmail(email) || rating < 0) {
+      return setIsItValid(false);
+    }
 
     // dados para armazenar em localStorage
-
     const newComment: CommentType = {
       email,
       text,
@@ -51,21 +58,13 @@ function DetailsPage() {
     };
 
     // adicionando dados à localStorage
-    function addComment(comment: CommentType) {
-      const jsonString = localStorage.getItem(id as string);
-      const list: CommentType[] = jsonString ? JSON.parse(jsonString) : []; // variável que armazena os dados do localStorage
-      list.push(comment);
-
-      localStorage.setItem(id as string, JSON.stringify(list));
-
-      return list;
-    }
-    setCommentsList(addComment(newComment));
+    setCommentsList(addComment(newComment, id as string));
+    setIsItValid(true);
 
     // limpando imputs
     setEmail('');
     setText('');
-    setrating(-1);
+    setRating(-1);
   };
   return (
     <div>
@@ -111,7 +110,7 @@ function DetailsPage() {
       </div>
       <h2>Avaliações</h2>
       <form>
-        { !isItValid && <span>Campos inválidos</span> }
+        { !isItValid ? <span data-testid="error-msg">Campos inválidos</span> : <span />}
         <input
           data-testid="product-detail-email"
           type="email"
@@ -144,7 +143,7 @@ function DetailsPage() {
             >
               <h4 data-testid="review-card-email">{comment.email}</h4>
               <div data-testid="review-card-rating">
-                { '★'.repeat(+comment.rating) }
+                { '★'.repeat((+comment.rating) + 1) }
               </div>
               <p data-testid="review-card-evaluation">{comment.text}</p>
             </div>

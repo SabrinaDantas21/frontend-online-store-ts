@@ -21,10 +21,11 @@ function Rating({ rating, onRatingChange }: RatingProps) {
       {[...new Array(5)].map((star, index) => {
         return (
           <label
-            htmlFor={ `star-${index}` }
+            htmlFor={ `star-${index + 1}` }
             key={ index }
             onMouseEnter={ () => handleMouseEnter(index) }
             onMouseLeave={ handleMouseLeave }
+            data-testid={ `${index + 1}-rating` }
             style={ {
               cursor: 'pointer',
               color: (hoveredRating || rating) >= index ? 'gold' : 'gray',
@@ -38,9 +39,8 @@ function Rating({ rating, onRatingChange }: RatingProps) {
               style={ {
                 display: 'none',
               } }
-              id={ `star-${index}` }
-              value={ star }
-              data-testid={ `${index}-rating` }
+              id={ `star-${index + 1}` }
+              value={ index + 1 }
               onClick={ () => handleClick(index) }
             />
           </label>
