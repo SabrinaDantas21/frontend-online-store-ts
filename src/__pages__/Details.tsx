@@ -74,25 +74,24 @@ function DetailsPage({ setCountItems, countItems }: DetailsPageProp) {
     <div>
       <Link to="/"><TiArrowBack /></Link>
       <CartButton countItems={ countItems } />
-      <button
-        type="button"
-        data-testid="product-detail-add-to-cart"
-        onClick={ () => {
-          if (productDetails) {
-            const storageCart = addProductCart(productDetails);
-            setCountItems(
-              storageCart.reduce((prev, curr) => prev + curr.selected_quantity, 0),
-            );
-          }
-        } }
-      >
-        Adicionar ao carrinho
-      </button>
       <Link
         to="/shopping-cart"
         data-testid="shopping-cart-button"
       >
-        <FaShoppingCart />
+        <button
+          type="button"
+          data-testid="product-detail-add-to-cart"
+          onClick={ () => {
+            if (productDetails) {
+              const storageCart = addProductCart(productDetails);
+              setCountItems(
+                storageCart.reduce((prev, curr) => prev + curr.selected_quantity, 0),
+              );
+            }
+          } }
+        >
+          Adicionar ao carrinho
+        </button>
       </Link>
       <div>
         <h2 data-testid="product-detail-name">
@@ -108,6 +107,8 @@ function DetailsPage({ setCountItems, countItems }: DetailsPageProp) {
             src={ productDetails?.thumbnail }
             alt={ productDetails?.title }
           />
+          { productDetails?.shipping.free_shipping === true
+            ? (<h3 data-testid="free-shipping">Frete grátis</h3>) : '' }
           <h3>Especificações técnicas</h3>
           <ul>
             { productDetails?.attributes.map((attribute: AttributeType) => {

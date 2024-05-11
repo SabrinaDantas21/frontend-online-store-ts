@@ -23,7 +23,9 @@ export type ProductsType = {
   official_store_id: null,
   use_thumbnail_id: boolean,
   accepts_mercadopago: boolean,
-  shipping: object,
+  shipping: {
+    free_shipping: boolean,
+  },
   stop_time: string,
   seller: object,
   attributes: [],
@@ -99,6 +101,7 @@ export type SearchBarProp = {
   handleType: (value: React.ChangeEvent<HTMLInputElement>) => void;
   onSubmit: (value: FormEvent<HTMLFormElement>) => void;
   countItems: number;
+};
 
 export type RatingProps = {
   rating: number;
