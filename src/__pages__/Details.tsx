@@ -74,25 +74,20 @@ function DetailsPage({ setCountItems, countItems }: DetailsPageProp) {
     <div>
       <Link to="/"><TiArrowBack /></Link>
       <CartButton countItems={ countItems } />
-      <Link
-        to="/shopping-cart"
-        data-testid="shopping-cart-button"
+      <button
+        type="button"
+        data-testid="product-detail-add-to-cart"
+        onClick={ () => {
+          if (productDetails) {
+            const storageCart = addProductCart(productDetails);
+            setCountItems(
+              storageCart.reduce((prev, curr) => prev + curr.selected_quantity, 0),
+            );
+          }
+        } }
       >
-        <button
-          type="button"
-          data-testid="product-detail-add-to-cart"
-          onClick={ () => {
-            if (productDetails) {
-              const storageCart = addProductCart(productDetails);
-              setCountItems(
-                storageCart.reduce((prev, curr) => prev + curr.selected_quantity, 0),
-              );
-            }
-          } }
-        >
-          Adicionar ao carrinho
-        </button>
-      </Link>
+        Adicionar ao carrinho
+      </button>
       <div>
         <h2 data-testid="product-detail-name">
           {productDetails?.title}
@@ -120,13 +115,6 @@ function DetailsPage({ setCountItems, countItems }: DetailsPageProp) {
             })}
           </ul>
         </div>
-        <button
-          type="button"
-          data-testid="product-detail-add-to-cart"
-          onClick={ () => { if (productDetails) addProductCart(productDetails); } }
-        >
-          Adicionar ao carrinho
-        </button>
       </div>
       <h2>Avaliações</h2>
       <form>
