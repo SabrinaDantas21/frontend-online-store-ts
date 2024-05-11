@@ -1,18 +1,16 @@
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { FaShoppingCart } from 'react-icons/fa';
 import { TiArrowBack } from 'react-icons/ti';
 import { Link } from 'react-router-dom';
 import Card from '../__components__/Card';
-import { ProductsType } from '../types';
+import { ProductsType, ShoppingCartPropsType } from '../types';
 import {
   addProductCart,
   decrementProductCart,
   removeProductCart,
 } from '../services/tools';
 
-export default function ShoppingCart() {
-  const [cart, setCart] = useState<ProductsType[] | []>([]);
-
+export default function ShoppingCart({ cart, setCart }: ShoppingCartPropsType) {
   useEffect(() => {
     const jsonString = localStorage.getItem('productsCart');
     const products = jsonString ? JSON.parse(jsonString) : [];
@@ -41,6 +39,8 @@ export default function ShoppingCart() {
         <FaShoppingCart />
       </h2>
       <Link to="/"><TiArrowBack /></Link>
+      <br />
+      <Link to="/checkout" data-testid="checkout-products">Checkout</Link>
       {
         !cart.length
           ? (
@@ -51,9 +51,9 @@ export default function ShoppingCart() {
           : cart.map((element, index) => (<Card
               key={ index }
               prop={ element }
-              addProductFunc={ () => handleIncrementProduct(element) }
-              decrementProductFunc={ () => handleDecrementProduct(element) }
-              removeProductFunc={ () => handleProductRemoval(element) }
+              addProductFunc={ handleIncrementProduct }
+              decrementProductFunc={ handleDecrementProduct }
+              removeProductFunc={ handleProductRemoval }
           />
           ))
             }

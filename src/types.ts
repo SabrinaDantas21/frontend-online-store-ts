@@ -80,6 +80,11 @@ export type InfoListProp = {
   description: string;
 };
 
+export type ShoppingCartPropsType = {
+  cart: ProductsType[];
+  setCart: React.Dispatch<React.SetStateAction<ProductsType[]>>;
+};
+
 export type CardInfoPropsType = {
   prop: ProductsType;
   addProductFunc: (prop: ProductsType) => void;

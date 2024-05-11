@@ -56,9 +56,14 @@ const validateEmail = (email: string) => {
   return validRegex.test(email);
 };
 
+function clearCart() {
+  localStorage.setItem('productsCart', '');
+}
+
 export {
   addProductCart,
   decrementProductCart,
   removeProductCart,
   validateEmail,
+  clearCart,
   addComment };
