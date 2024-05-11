@@ -1,4 +1,4 @@
-import { ProductsType } from '../types';
+import { ProductsType, CommentType } from '../types';
 
 function addProductCart(prop: ProductsType) {
   const jsonString = localStorage.getItem('productsCart');
@@ -41,8 +41,29 @@ function removeProductCart(product: ProductsType) {
   return filteredCart;
 }
 
+function addComment(comment: CommentType, id: string) {
+  const jsonString = localStorage.getItem(id);
+  const list: CommentType[] = jsonString ? JSON.parse(jsonString) : []; // variável que armazena os dados do localStorage
+  list.push(comment);
+
+  localStorage.setItem(id, JSON.stringify(list));
+
+  return list;
+}
+
+const validateEmail = (email: string) => {
+  const validRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
+  return validRegex.test(email);
+};
+
 function clearCart() {
   localStorage.setItem('productsCart', '');
 }
 
-export { addProductCart, decrementProductCart, removeProductCart, clearCart };
+export {
+  addProductCart,
+  decrementProductCart,
+  removeProductCart,
+  validateEmail,
+  clearCart,
+  addComment };
