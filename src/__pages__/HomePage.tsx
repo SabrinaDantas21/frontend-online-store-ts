@@ -11,7 +11,7 @@ import Aside from '../__components__/Aside';
 import Loading from '../__components__/Loading';
 import { addProductCart } from '../services/tools';
 
-export default function HomePage() {
+export default function HomePage({ countItems }: { countItems: number }) {
   const [categoriesList, setCategoriesList] = useState<Product[]>();
   const [isCatListLoading, setIsCatListLoading] = useState(true);
   const [isListLoading, setIsListLoading] = useState(false);
@@ -58,6 +58,7 @@ export default function HomePage() {
         searched={ query }
         handleType={ handleType }
         onSubmit={ handleSubmit }
+        countItems={ countItems }
       />
       { !products.length && !searched
         && (

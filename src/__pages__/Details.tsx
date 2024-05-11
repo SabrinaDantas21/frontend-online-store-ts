@@ -1,15 +1,19 @@
 import { useParams, Link } from 'react-router-dom';
 import { TiArrowBack } from 'react-icons/ti';
-import { FaShoppingCart } from 'react-icons/fa';
 import { useEffect, useState } from 'react';
 import { getProductById } from '../services/api';
 import InfoList from '../__components__/InfoList';
 import { AttributeType, CommentType, ProductsType } from '../types';
 import { addProductCart, validateEmail, addComment } from '../services/tools';
+import CartButton from '../__components__/CartButton';
 import Rating from '../__components__/Rating';
 
-function DetailsPage() {
-  // estado dos dados do produto que estão sendo renderizados
+type DetailsPageProp = {
+  setCountItems: React.Dispatch<React.SetStateAction<number>>;
+  countItems: number;
+};
+
+function DetailsPage({ setCountItems, countItems }: DetailsPageProp) {
   const [productDetails, setProductDetails] = useState<ProductsType>();
   // estados dos campos do formulário
   const [email, setEmail] = useState('');
@@ -69,12 +73,21 @@ function DetailsPage() {
   return (
     <div>
       <Link to="/"><TiArrowBack /></Link>
-      <Link
-        to="/shopping-cart"
-        data-testid="shopping-cart-button"
+      <CartButton countItems={ countItems } />
+      <button
+        type="button"
+        data-testid="product-detail-add-to-cart"
+        onClick={ () => {
+          if (productDetails) {
+            const storageCart = addProductCart(productDetails);
+            setCountItems(
+              storageCart.reduce((prev, curr) => prev + curr.selected_quantity, 0),
+            );
+          }
+        } }
       >
-        <FaShoppingCart />
-      </Link>
+        Adicionar ao carrinho
+      </button>
       <div>
         <h2 data-testid="product-detail-name">
           {productDetails?.title}
@@ -89,6 +102,8 @@ function DetailsPage() {
             src={ productDetails?.thumbnail }
             alt={ productDetails?.title }
           />
+          { productDetails?.shipping.free_shipping === true
+            ? (<h3 data-testid="free-shipping">Frete grátis</h3>) : '' }
           <h3>Especificações técnicas</h3>
           <ul>
             { productDetails?.attributes.map((attribute: AttributeType) => {
@@ -100,13 +115,6 @@ function DetailsPage() {
             })}
           </ul>
         </div>
-        <button
-          type="button"
-          data-testid="product-detail-add-to-cart"
-          onClick={ () => { if (productDetails) addProductCart(productDetails); } }
-        >
-          Adicionar ao carrinho
-        </button>
       </div>
       <h2>Avaliações</h2>
       <form>

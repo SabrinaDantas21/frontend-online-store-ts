@@ -24,6 +24,8 @@ function Card({
                 <h2>{ prop.title }</h2>
                 <img src={ prop.thumbnail } alt={ prop.title } />
                 <h4>{ `Preço:R$${prop.price}` }</h4>
+                { prop.shipping.free_shipping === true
+                  ? (<h3 data-testid="free-shipping">Frete grátis</h3>) : '' }
               </Link>
               <button
                 type="button"
