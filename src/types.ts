@@ -99,4 +99,14 @@ export type SearchBarProp = {
   handleType: (value: React.ChangeEvent<HTMLInputElement>) => void;
   onSubmit: (value: FormEvent<HTMLFormElement>) => void;
   countItems: number;
+
+export type RatingProps = {
+  rating: number;
+  onRatingChange: (rating: number) => void;
+};
+
+export type CommentType = {
+  email: string;
+  rating: number;
+  text: string;
 };
